@@ -1,0 +1,507 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const cookies_utils_1 = require("cookies-utils");
+const Curso_1 = require("./models/Curso");
+const Estudiante_1 = require("./Estudiante");
+const cursos_mock_1 = require("./mock/cursos.mock");
+const persona_1 = require("./models/persona");
+const ITarea_1 = require("./intefaces/ITarea");
+const programar_1 = require("./models/programar");
+console.log("Hello World!");
+console.log("Hello Silkaleex =)");
+//Comentario En TS
+/** *Comentario multilinea */
+/*Declaracion de Variables en Typescript: */
+var nombre = "Alejandro";
+let email = "alejandro@gmail.com"; //Variable de ambito local
+console.log("Hola" + nombre);
+console.log("¿Que tal", nombre, "?");
+console.log("¿Como han ido las vacaciones,${nombre}?");
+console.log(`El email de ${nombre} es ${email}`);
+var perro = "Richi";
+console.log("Hola" + perro);
+const PI = 3.1416;
+var apellidos = "Pascual"; //Tipo any hace que la variablee pueda cambiar de tipo
+apellidos = 1;
+var error;
+error = false;
+console.log(`¿Hay error?:${error}`);
+let a, b, c; //intancia 3 variables sin valor incial
+a = "Typescript";
+b = true;
+c = 6.9;
+//BuiltIN Types: Number,String,Boolean,Void,null y Undefined
+//Tipos de valores mas complejos que los primitivos
+//Lista de cadenas de texto
+let listaTareas = ["Tarea 1", "Tarea 2"];
+//Combinacion de tipos en listas
+let valores = [false, "hola", true, 39];
+//Enumerados
+var Estados;
+(function (Estados) {
+    Estados["completado"] = "C";
+    Estados["incompleto"] = "I";
+    Estados["pendiente"] = "P";
+})(Estados || (Estados = {}));
+var PuestoCarrera;
+(function (PuestoCarrera) {
+    PuestoCarrera[PuestoCarrera["Primero"] = 1] = "Primero";
+    PuestoCarrera[PuestoCarrera["segundo"] = 2] = "segundo";
+    PuestoCarrera[PuestoCarrera["tercero"] = 3] = "tercero";
+})(PuestoCarrera || (PuestoCarrera = {}));
+let estadoTarea = Estados.completado;
+let puestoMaraton = PuestoCarrera.segundo;
+//podemos crear variables que puedan segir la inteface de Tarea
+let tarea1 = {
+    nombre: "Tarea 1",
+    estado: Estados.pendiente,
+    urgencia: 10,
+};
+console.log(`Tarea:${tarea1.nombre}`);
+let coche = {
+    nombre: "mercedes",
+    precio: 23000,
+    anio: 2000,
+};
+//Asignación multiples variables
+let miTarea = {
+    titulo: "Mi tarea",
+    estado: Estados.completado,
+    urgencia: 1,
+};
+//Declaracion 1 a 1
+let miTitulo = miTarea.titulo;
+let miEstado = miTarea.estado;
+let miUrgencia = miTarea.urgencia;
+//**Factor Spread(Propagacion) */
+//Declaracion con factor de propagacion
+//Asignando variables
+let { titulo, estado, urgencia } = miTarea;
+//En listas
+let listaCompraLunes = ["zanahorias", "Pimientos"];
+let listaCompraMartes = [...listaCompraLunes, "leche", "carne"];
+let listaCompraMiercoles = ["pescado", "fruta"];
+let listaCompraSemana = [...listaCompraLunes, ...listaCompraMiercoles];
+//En Objetos
+let estadoApp = {
+    ususario: "Admin",
+    session: 3,
+    jwt: "users12345",
+};
+//Cambio de valores de propagación
+let nuevoEstado = Object.assign(Object.assign({}, estadoApp), { session: 4 });
+//**Condicionales: */
+//Operador ternario
+console.log(coche.anio < 2000
+    ? `coche:${coche.nombre} es viejo`
+    : `coche:${coche.nombre} es nuevo`);
+//If - else
+if (error) {
+    console.log("Hay un error");
+}
+else {
+    console.log("Correcto!");
+}
+//if-elseif-else
+if (coche.anio < 2000) {
+    console.log(`coche:${coche.nombre} es viejo`);
+}
+else if (coche.anio === 2000) {
+    console.log(`coche:${coche.nombre} es del 2000`);
+}
+else {
+    `Coche.${coche.nombre} es nuevo`;
+}
+//Switch
+switch (tarea1.estado) {
+    case Estados.completado:
+        console.log("La tarea esta completada");
+        break;
+    case Estados.incompleto:
+        console.log("la tarea no esta completa");
+    case Estados.pendiente:
+        console.log("La tarea esta pendiente de revisarse");
+    default:
+        break;
+}
+//Bucles
+let listaTareasNueva = [
+    { nombre: "Tarea1", estado: Estados.completado, urgencia: 2 },
+    { nombre: "Tarea2", estado: Estados.pendiente, urgencia: 0 },
+    { nombre: "Tarea1", estado: Estados.incompleto, urgencia: 15 },
+];
+//For Clásico
+for (let index = 0; index < listaTareasNueva.length; index++) {
+    const tarea = listaTareasNueva[index];
+    console.log(`${index} - ${tarea.nombre}`);
+}
+//Foreach
+listaTareasNueva.forEach((tarea, index) => {
+    console.log(`${index}-${tarea.nombre}`);
+});
+//Bucles While
+while (tarea1.estado !== Estados.completado) {
+    if (tarea1.urgencia == 20) {
+        tarea1.estado = Estados.completado;
+        break;
+    }
+    else {
+        tarea1.urgencia++;
+    }
+}
+//Do-while
+do {
+    tarea1.urgencia++;
+    tarea1.estado = Estados.completado;
+} while (tarea1.estado !== Estados.completado);
+//Funciones en TS
+//Dentro de la function no se puede acceder desde fuera
+function saludo() {
+    console.log("Hello World!");
+    let nombre = "Alejandro";
+    console.log(`Hola, ${nombre}`);
+}
+//Invocamos la funcion
+saludo();
+/*Function que muestra un saludo por consola a una persona*/
+/*@param nombre Nombre de la persona saludo */
+function saludoPersona(nombre) {
+    console.log(`Hola,${nombre}!`);
+}
+saludoPersona("Alejandro");
+/*
+ *Function que muestra un Adiós por consola a una persona
+ *@param nombre de la persona a depedirPersona,por defecto sera Pepe
+ */
+function despedirpersona(nombre = "Pepe") {
+    console.log(`¡Adiós,${nombre}!`);
+}
+despedirpersona(); //Adios Pepe
+despedirpersona("Alba"); //Adios, Alba
+//? es Opcional
+/** @param nombre(opcional) Nombre de la persona a depedidaOPcional*/
+function despedidaOpcional(nombre) {
+    if (nombre) {
+        console.log(`¡Adiós,${nombre}`);
+    }
+    else {
+        console.log(`¡Adiós!`);
+    }
+}
+despedidaOpcional(); //¡Adiós!
+despedidaOpcional("Juan"); //¡Adios Juan!
+function variosParams(nombre, apellidos, edad = 18) {
+    if (apellidos) {
+        console.log(`${nombre},${apellidos} tiene ${edad} años`);
+    }
+    else {
+        console.log(`${nombre} tiene ${edad} años`);
+    }
+}
+variosParams("Alejandro"); //Alejandro tiene 18 años
+variosParams("Alejandro", "Pascual"); //Alejandro Pascual tiene 18 años
+variosParams("Alejandro", "Pascual", 27); //Alejandro Pascual tiene 27 años
+variosParams("Alejandro", undefined, 27); //Alejandro tiene 27 años
+variosParams((nombre = "Alejandro"), (apellidos = "Pascual")); //Alejandro Pascual tiene 27años
+function ejemploVariosTipos(a) {
+    if (typeof a === "string") {
+        console.log("A es un string");
+    }
+    else if (typeof a === "number") {
+        console.log("A no es un number");
+    }
+    else {
+        console.log("A no es un string ni un number");
+        throw Error("A no es un string ni un number");
+    }
+}
+ejemploVariosTipos("hola");
+ejemploVariosTipos(3);
+/**@param nombre Nombre de la persona
+ * @param apellidos Apellidos de la persona
+ * @returns Nombre completo de la persona
+ */
+function ejemploReturn(nombre, apellidos) {
+    return `${nombre}, ${apellidos}`;
+}
+const nombreCompleto = ejemploReturn("Alejandro", "Pascual");
+console.log(nombreCompleto);
+console.log(ejemploReturn("Alejandro", "Pascual")); //Alejandro Pascual
+/**@params nombres es una lista de nombres de string */
+function multiparams(...nombres) {
+    nombres.forEach((nombre) => {
+        console.log(nombre);
+    });
+}
+multiparams("Alejandro", "Facundo", "Fernando", "Belen");
+const lista = ["Raquel", "Monica"];
+multiparams(...lista);
+function ejemploParamLista(nombres) {
+    nombres.forEach((nombre) => {
+        console.log(nombre);
+    });
+}
+ejemploParamLista(lista);
+let empleado = {
+    nombre: "Alejandro",
+    apellidos: "Pascual",
+    edad: 27,
+};
+const mostrarEmpleado = (empleado) => `${empleado.nombre} tiene ${empleado.edad} años`;
+//Llamamos a la función
+mostrarEmpleado(empleado);
+const datosEmpleado = (empleado) => {
+    if (empleado.edad > 70) {
+        return `Empleado ${empleado.nombre} esta en edad de jubilacion`;
+    }
+    else {
+        return `Empleado ${empleado.nombre} esta en edad laboral`;
+    }
+};
+datosEmpleado(empleado); //Empleado Alejandro esta en edad laboral
+const obtenerSalario = (empleado, cobrar) => {
+    if (empleado.edad > 70) {
+        return;
+    }
+    else {
+        cobrar(); //callback a ejecutar
+    }
+};
+const cobrarEmpleado = (empleado) => {
+    console.log(`${empleado.nombre} Cobra su salario`);
+};
+obtenerSalario(empleado, () => "Cobrar Alejandro");
+//Async Function
+function ejemploAsync() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield console.log("tarea a completar antes de seguir con la secuencia de instrucciones");
+        console.log("Tarea Completada");
+        return "completado";
+    });
+}
+ejemploAsync()
+    .then((respuesta) => {
+    console.log("Respuesta", respuesta);
+})
+    .catch((error) => {
+    console.log("Ha habido un error", error);
+})
+    .finally(() => "Todo a Terminado");
+// //Funciones generatdoras(Generators)
+// function ejemploGenerator() {
+//   //yield ==> Emite Valores
+//   let index = 0;
+//   while (index > 5) {
+//     //Emitimos un valor incrementado
+//     yield index++;
+//   }
+// }
+// //Guardamos la funcion generadora en una variable
+// let generadora = ejemploGenerator();
+// //Acceder a los valores emitidos
+// console.log(generadora.next().value); //0
+// console.log(generadora.next().value); //1
+// console.log(generadora.next().value); //2
+// console.log(generadora.next().value); //0
+//Worker
+function* watcher(valor) {
+    yield valor; //emitimos el valor inicial
+    yield* worker(valor); //Llamamos a las emisiones del worker para que no emita otros valores
+    yield valor + 4; //emitimos el valor final + 4
+}
+function* worker(valor) {
+    yield valor + 1;
+    yield valor + 2;
+    yield valor + 3;
+}
+let generatorSaga = watcher(0);
+console.log(generatorSaga.next().value); //0(Lo hace el watcher)
+console.log(generatorSaga.next().value); //1(Lo hace el worker)
+console.log(generatorSaga.next().value); //2(Lo hace el worker)
+console.log(generatorSaga.next().value); //3(Lo hace el worker)
+console.log(generatorSaga.next().value); //4(Lo hace el watcher)
+//sobrecarga de funciones
+function mostrarError(error) {
+    console.log("Hay un error:", error);
+}
+//Persistencia de datos
+//1:LocalStorage --> Almacena los datos en el navegador (No se eliminan automaticamente)
+//2:SessionStorage-->La diferencia radica en la sesion de navegador.Es decir,los datos se persisten en la sesion del navegado
+//3:Cookies--->Tienen fecha de caducidad y tienen un ambito de URl
+//LocalStorage
+// function guardar(): void {
+//   localStorage.set("nombre", "Alejandro");
+//   sessionStorage.set("nombre", "Alejandro");
+// }
+// function leer(): void {
+//   let nombre = localStorage.get("nombre");
+//   let nombreSession = sessionStorage.get("nombre");
+// }
+// function borrarItem(item:string){
+//   localStorage.removeItem(item)
+//   sessionStorage.removeItem(item)
+// }
+// function borrarTodas():void{
+//   localStorage.clear();
+//   sessionStorage.clear()
+// }
+//Cookies
+const cookieOptions = {
+    name: "usuario",
+    value: "Alejandro",
+    maxAge: 10 * 60,
+    expires: new Date(2099, 10, 1),
+    path: "/", // optional string,
+};
+//Seteamos la Cookie
+(0, cookies_utils_1.setCookie)(cookieOptions);
+//Eliminar Cookie
+(0, cookies_utils_1.deleteCookie)("usuario");
+//Eliminar todas las cookies
+(0, cookies_utils_1.deleteAllCookies)();
+//leer una Cokie
+let cookieLeida = (0, cookies_utils_1.getCookieValue)("usuario");
+//Clase Temporizador
+class Temporizador {
+    empezar() {
+        setTimeout(() => {
+            //Comprobar que exisa la funcion terminar como callback
+            if (!this.terminar)
+                return;
+            //Cuando haya pasado el tiempo se ejecute la funcion terminar
+            this.terminar(Date.now());
+        }, 10000);
+    }
+}
+const miTemporizador = new Temporizador();
+//Definimos la funcion del calback a ejecutar cuando termine el tiempo
+miTemporizador.terminar = (tiempo) => {
+    console.log("Evento ha finalizado:", tiempo);
+};
+//Lanzamos el temporizador
+miTemporizador.empezar(); //Se inicia el timeout y cuando termine, se ejecuta la funcioin terminar()
+setInterval(() => console.log("Tic"), 1000); ///Imprimir "tic" cada segundo por consola
+//Elimina la ejecucion de la funcion
+delete miTemporizador.terminar;
+//Dom con eventos
+// document.getElementById("boton-login").addEventListener("click", () => {
+//   console.log("Has echo click en login");
+// });
+///ESTAS CLASES ESTAN IMPORTADAS EN ESTUDIANTE Y CURSO .TS
+//Creamos Curso
+// const cursoEnTs: Curso = new Curso("Typescript", 15);
+// const cursoEnJs: Curso = new Curso("Javascript", 20);
+//Usamos el Mock que son com un Fake Data
+const listaCursos = cursos_mock_1.LISTACURSOS;
+// listaCursos.push(cursoEnTs, cursoEnJs); //[Datos en la lista de Curso]
+//Crear un estudiante
+const Alejandro = new Estudiante_1.Estudiante("Alejandro", listaCursos, "Pascual");
+console.log(`${Alejandro.nombre}Estudia:`);
+//Iteramos por cada uno de ellos
+Alejandro.cursos.forEach((Curso) => {
+    console.log(`- ${Curso.nombre}  (${Curso.horas} horas)`);
+}); //Typescript (15 horas)
+const cursoAngular = new Curso_1.Curso("Angular", 40);
+Alejandro.cursos.push(cursoAngular); //Añadimos
+//Conocer horas estudiadas;//number
+Alejandro.horasEstudiadas; //number
+Alejandro.Id_Estudiante;
+//Saber instancia de un objeto o una variable
+//TypeOf
+//InstanceOf
+let texto = new String("Hola");
+let fehcaNacimiento = new Date(1995, 30, 1);
+if (fehcaNacimiento instanceof Date) {
+    console.log("Es una instancia de Date");
+}
+if (Alejandro instanceof Estudiante_1.Estudiante) {
+    console.log("Alejandro Es un estudiante");
+}
+//Herencia y Polimorfismo
+let trabajador1 = new persona_1.Trabajador("Alejandro", "Pascual", 27, 2000);
+let trabajador2 = new persona_1.Trabajador("Lucia", "Gomez", 40, 1500);
+let trabajador3 = new persona_1.Trabajador("Pedro", "Perez", 18, 5000);
+// empleado1.saludar();
+let jefe = new persona_1.Jefe("Alfredo", "rodriguez", 55);
+jefe.trabajadores.push(trabajador1, trabajador2, trabajador3);
+trabajador1.saludar(); //uso especificado en empleado
+jefe.saludar(); //Herencia de Persona
+jefe.trabajadores.forEach((trabajador) => {
+    trabajador.saludar(); //Especifica el trabajador
+});
+//Uso de Interfaces
+let programar = {
+    titulo: "Programar en Typescript",
+    description: "Aprendiendo Katas para desarrollar TS",
+    completada: false,
+    urgencia: ITarea_1.Nivel.urgente,
+    resumen: function () {
+        return `${this.titulo} - ${this.completada} - Nivel:${this.urgencia}`;
+    },
+};
+console.log(programar.resumen());
+//Tarea de programacion(implementa ITarea)
+let ProgramarTS = new programar_1.Programar("Typescript", "Tarea de Programación en TS", false, ITarea_1.Nivel.Bloqueante);
+console.log(ProgramarTS.resumen());
+//Decoradores Experimentales ---> @
+// - Clases
+// - Parametros
+// - Metodos
+// - Propiedades
+// @Components{
+//   //configuraciones
+// }class Botton{
+// }
+/* */
+// function Override(label: string) {
+//   return function (target: any, key: string) {
+//     Object.defineProperty(target, key, {
+//       configurable: false,
+//       get: () => label,
+//     });
+//   };
+// }
+// class PuebaDecorador {
+//   @Override("Prueba") //LLamar a ala funcion Override
+//   nombre: string = "Alejandro";
+// }
+// let prueba = new PuebaDecorador();
+// console.log(prueba.nombre); //"Prueba siempre se devolvera a traves del get"
+// //Otra FUncion para usarla como decorador
+// function sololectura(target: any, key: string) {
+//   Object.defineProperty(target, key, {
+//     writable: false,
+//   });
+// }
+// class pruebaSoloLectura {
+//   @sololectura
+//   nombre: string = "";
+// }
+// let pruebaLectura = new pruebaSoloLectura();
+// pruebaLectura.nombre = "Alejandro";
+// console.log(pruebaLectura.nombre); // Undefined, no se le puede dar un valor, es solo de lectura
+// //Decorador de parametros de un argumento
+// function mostrarPosicion(
+//   target: any,
+//   propertykey: string,
+//   parameterIndex: number
+// ) {
+//   console.log("Posicion", parameterIndex);
+// }
+// class pruebaMetodoDecorador {
+//   prueba(a: string, @mostrarPosicion b: boolean) {
+//     console.log(b);
+//   }
+// }
+// //usamos el método con el parametro y su decorador
+// let pruebaDecoradorEnParam = new pruebaMetodoDecorador().prueba("Hola", false);
+//# sourceMappingURL=index.js.map
